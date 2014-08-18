@@ -1,0 +1,16 @@
+{
+  "name": "otalk-chat-input-view",
+  "version": "1.0.0",
+  "description": "Otalk chat input view",
+  "main": "index.js",
+  "author": "Lance Stout <lance@andyet.net>",
+  "license": "MIT",
+  "dependencies": {
+    "underscore": "^1.6.0",
+    "ampersand-view": "^6.0.10"
+  },
+  "devDependencies": {
+    "jshint": "^2.5.3",
+    "precommit-hook": "^1.0.7"
+  }
+}
