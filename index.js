@@ -3,7 +3,7 @@ var View = require('ampersand-view');
 
 
 var ChatInputView = View.extend({
-    template: '<textarea autocomplete="off"></textarea>',
+    template: '<textarea data-hook="chat-input" autocomplete="off"></textarea>',
 
     bindings: {
         editing: {
@@ -17,8 +17,8 @@ var ChatInputView = View.extend({
         },
         placeholder: {
             type: 'attribute',
-            selector: 'textarea',
-            name: 'placeholder'
+            name: 'placeholder',
+            hook: 'chat-input'
         }
     },
 
