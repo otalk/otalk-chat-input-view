@@ -24,7 +24,8 @@ var ChatInputView = View.extend({
 
     events: {
         keydown: 'handleKeyDown',
-        keyup: 'handleKeyUp'
+        keyup: 'handleKeyUp',
+        input: 'handleInput'
     },
 
     props: {
@@ -37,13 +38,19 @@ var ChatInputView = View.extend({
     },
 
     initialize: function (spec) {
-        this._sendChatState = spec.sendChatState || function () {};
-        this._sendChat = spec.sendChat || function () {};
-        this._previousMessage = spec.previousMessage || function () {};
-
         if (spec.template) {
             this.template = spec.template;
         }
+
+        if (spec.sendChatState) {
+            this.bind('chatstate', spec.sendChatState);
+        }
+
+        if (spec.sendChat) {
+            this.bind('chat', spec.sendChat);
+        }
+
+        this._previousMessage = spec.previousMessage || function () {};
 
         this.bind('change:active', this.handleActive);
     },
@@ -53,14 +60,16 @@ var ChatInputView = View.extend({
         this.cacheElements({
             chatInput: 'textarea'
         });
+
+        this.chatInputStyle = getComputedStyle(this.chatInput);
         return this;
     },
 
     handleActive: function () {
         if (this.active) {
-            this._sendChatState('active');
+            this.sendChatState('active');
         } else {
-            this._sendChatState('inactive');
+            this.sendChatState('inactive');
         }
     },
 
@@ -94,23 +103,33 @@ var ChatInputView = View.extend({
         } else if (!arrowKeys[e.which] && !e.ctrlKey && !e.metaKey && (!this.typing || this.paused)) {
             this.typing = true;
             this.paused = false;
-            this._sendChatState('composing');
+            this.sendChatState('composing');
         }
     },
 
     handleKeyUp: function () {
+        this.resizeInput();
         if (this.typing && this.chatInput.value.length === 0) {
             this.typing = false;
-            this._sendChatState('active');
+            this.sendChatState('active');
         } else if (this.typing) {
             this.handlePausedTyping();
         }
     },
 
+    handleInput: function () {
+        this.resizeInput();
+        if (!this.typing) {
+            this.typing = true;
+            this.sendChatState('composing');
+        }
+        this.trigger('input', this.chatInput.value);
+    },
+
     handlePausedTyping: _.debounce(function () {
         if (this.typing && !this.paused) {
             this.paused = true;
-            this._sendChatState('paused');
+            this.sendChatState('paused');
         }
     }, 3000),
 
@@ -119,9 +138,9 @@ var ChatInputView = View.extend({
 
         if (val) {
             if (this.editing) {
-                this._sendChat(val, this.prevMessageID);
+                this.trigger('chat', val, this.prevMessageID);
             } else {
-                this._sendChat(val);
+                this.trigger('chat', val);
             }
         }
 
@@ -129,7 +148,15 @@ var ChatInputView = View.extend({
         this.typing = false;
         this.paused = false;
         this.chatInput.value = '';
-    }
+    },
+
+    sendChatState: function (state) {
+        this.trigger('chatstate', state);
+    },
+
+    resizeInput: _.throttle(function () {
+        this.trigger('resize');
+    }, 300)
 });
 
 
