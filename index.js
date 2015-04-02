@@ -1,5 +1,5 @@
 var throttle = require('lodash.throttle');
-var debounce = require('lodash.debouce');
+var debounce = require('lodash.debounce');
 var View = require('ampersand-view');
 
 
