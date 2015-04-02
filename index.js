@@ -1,4 +1,5 @@
-var _ = require('underscore');
+var throttle = require('lodash.throttle');
+var debounce = require('lodash.debouce');
 var View = require('ampersand-view');
 
 
@@ -126,7 +127,7 @@ var ChatInputView = View.extend({
         this.trigger('input', this.chatInput.value);
     },
 
-    handlePausedTyping: _.debounce(function () {
+    handlePausedTyping: debounce(function () {
         if (this.typing && !this.paused) {
             this.paused = true;
             this.sendChatState('paused');
@@ -154,7 +155,7 @@ var ChatInputView = View.extend({
         this.trigger('chatstate', state);
     },
 
-    resizeInput: _.throttle(function () {
+    resizeInput: throttle(function () {
         this.trigger('resize');
     }, 300)
 });
