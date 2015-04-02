@@ -6,8 +6,9 @@
   "author": "Lance Stout <lance@andyet.net>",
   "license": "MIT",
   "dependencies": {
-    "underscore": "^1.6.0",
-    "ampersand-view": "^7.0.1"
+    "ampersand-view": "^7.0.1",
+    "lodash.debounce": "^3.0.3",
+    "lodash.throttle": "^3.0.2"
   },
   "devDependencies": {
     "jshint": "^2.5.3",
