@@ -6,7 +6,7 @@
   "author": "Lance Stout <lance@andyet.net>",
   "license": "MIT",
   "dependencies": {
-    "ampersand-view": "^7.0.1",
+    "ampersand-view": "^9.0.2",
     "lodash.debounce": "^3.0.3",
     "lodash.throttle": "^3.0.2"
   },
